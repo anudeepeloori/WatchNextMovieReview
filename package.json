@@ -27,7 +27,6 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
-    "json-server": "^0.16.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
     "ngx-pagination": "^5.1.0",
@@ -38,7 +37,7 @@
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.11",
+    "@angular-devkit/build-angular": "^14.2.3",
     "@angular/cli": "~11.2.11",
     "@angular/compiler-cli": "~11.2.12",
     "@types/jasmine": "~3.6.0",
@@ -46,6 +45,7 @@
     "codelyzer": "^0.0.28",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
+    "json-server": "^0.4.2",
     "karma": "^6.3.20",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
