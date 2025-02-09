@@ -17,11 +17,11 @@ export class SeemoviesComponent implements OnInit {
   starRating = 0;
 
  myData:Item;
- constructor(private itemObj:DataService , private router:Router) { }
+ constructor(private ds:DataService , private router:Router) { }
 
  ngOnInit(): void {
 
-   this.itemObj.getItemsData().subscribe(
+   this.ds.getMoviesData().subscribe(
      items=>{
        this.myData=items;
      },
@@ -36,7 +36,6 @@ export class SeemoviesComponent implements OnInit {
  
  onSelectId(id){
    this.router.navigateByUrl('movies/'+id)
-
  
  }
 

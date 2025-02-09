@@ -18,7 +18,7 @@ constructor(private itemObj:DataService , private router:Router) { }
 
 ngOnInit(): void {
 
-  this.itemObj.getTopItemsData().subscribe(
+  this.itemObj.getTopMoviesData().subscribe(
     items=>{
       this.myData=items;
     },

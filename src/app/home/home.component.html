@@ -66,17 +66,17 @@
         <div class="col-lg-4 col-md-12 mb-4">
           <div class="card">
             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-              <img src="https://images.indianexpress.com/2021/05/venom-2-1200.jpg" class="img-fluid" />
+              <img src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/11/captain-america-brave-new-world-meaning.jpg" class="img-fluid w-100" style="height: 250px; object-fit: cover;" >
               <a href="#!">
                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
               </a>
             </div>
             <div class="card-body">
-              <h5 class="card-title">Venom 2</h5>
+              <h5 class="card-title">Captain America: Brave New World</h5>
               <p class="card-text">
-                It is an upcoming American superhero film featuring the Marvel Comics character Venom, produced by Columbia Pictures in association with Marvel and Tencent Pictures.
+                Sam Wilson, the new Captain America, finds himself in the middle of an international incident and must discover the motive behind a nefarious global plan. Produced by Marvel Studios.
               </p>
-              <a href="https://www.youtube.com/watch?v=-ezfi6FQ8Ds" class="btn btn-primary">Watch Trailer</a>
+              <a href="https://www.youtube.com/watch?v=1pHDWnXmK7Y" class="btn btn-primary">Watch Trailer</a>
             </div>
           </div>
         </div>
@@ -84,17 +84,17 @@
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card ">
             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-              <img src="https://lumiere-a.akamaihd.net/v1/images/image_8ba842c6.png" class="img-fluid" />
+              <img src="https://i.ytimg.com/vi/0boQ12P8mrw/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHYLjY3IiZGbbH2musDq3b4CGirQ" class="img-fluid w-100" style="height: 250px; object-fit: cover;" >
               <a href="#!">
                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
               </a>
             </div>
             <div class="card-body">
-              <h5 class="card-title">Black Widow</h5>
+              <h5 class="card-title">Superman</h5>
               <p class="card-text ">
-               It is an upcoming American superhero film based on the Marvel Comics character of the same name. Produced by Marvel Studios and distributed by Walt Disney Studios.
+                Superman is an upcoming American superhero film based on the eponymous character from DC Comics. Produced by DC Studios and to be distributed by Warner Bros. Pictures.
               </p>
-              <a href="https://www.youtube.com/watch?v=ybji16u608U" class="btn btn-primary">View Trailer</a>
+              <a href="https://www.youtube.com/watch?v=uhUht6vAsMY" class="btn btn-primary">View Trailer</a>
             </div>
           </div>
         </div>
@@ -102,17 +102,17 @@
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card">
             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-              <img src="https://i.ytimg.com/vi/0WVDKZJkGlY/maxresdefault.jpg" class="img-fluid" />
+              <img src="https://www.nbc.com/sites/nbcblog/files/styles/scale_600/public/2024/08/400761-5_k1c-jw_final_edit_subtitle_srgb.jpg" class="img-fluid w-100" style="height: 250px; object-fit: cover;" >
               <a href="#!">
                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
               </a>
             </div>
             <div class="card-body">
-              <h5 class="card-title">Eternals</h5>
+              <h5 class="card-title">Jurassic World Rebirth</h5>
               <p class="card-text">
-               It is an upcoming American superhero film based on the Marvel Comics race of the same name. Produced by Marvel Studios and distributed by Walt Disney Studios.
+                Jurassic World Rebirth is an upcoming American science fiction action film directed by Gareth Edwards and written by David Koepp. A standalone sequel to Jurassic World Dominion (2022).
               </p>
-              <a href="https://www.youtube.com/watch?v=0WVDKZJkGlY" class="btn btn-primary">View Trailer</a>
+              <a href="https://www.youtube.com/watch?v=jan5CFWs9ic" class="btn btn-primary">View Trailer</a>
             </div>
           </div>
         </div>
@@ -128,13 +128,15 @@
 
       <div class="row d-flex justify-content-center">
         <div class="col-md-6 text-white">
-          <form #ref="ngForm" (ngSubmit)="onSignup(ref.value)" >
+          <form #ref="ngForm" (ngSubmit)="ref.form.valid && onSignup(ref.value)" >
            
             <div class="row mb-4 ">
               <div class="col">
                 <div class="form-outline">
-                  <input type="text" id="form3Example1" class="form-control" name="username" ngModel/>
-                  <label class="form-label" for="form3Example1">user name</label>
+                  <p class="text-danger" *ngIf="(ref.submitted || refUsername.touched) && refUsername.errors?.required">* username is required</p>
+                  <p class="text-danger" *ngIf="(ref.submitted || refUsername.touched) && refUsername.errors?.minlength">* Min length of username should be 4</p>
+                  <input type="text" id="un" class="form-control" name="username" ngModel required minlength="4" #refUsername="ngModel">
+                  <label class="form-label" for="un">User name</label>
                 </div>
               </div>
              
@@ -142,20 +144,24 @@
 
             <!-- Email input -->
             <div class="form-outline mb-4">
-              <input type="email" id="form3Example3" class="form-control" name="email" ngModel />
-              <label class="form-label" for="form3Example3">Email address</label>
+              <p class="text-danger" *ngIf="(ref.submitted || refEmail.touched) && refEmail.errors?.required">* Email Id is required</p>
+              <p class="text-danger" *ngIf="(ref.submitted || refEmail.touched) && refEmail.errors?.pattern">* Provide appropriate email id</p>
+              <input type="email" id="email" class="form-control" name="email" ngModel required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #refEmail="ngModel">
+              <label class="form-label" for="email">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-              <input type="password" id="form3Example4" class="form-control" name="password"  ngModel />
-              <label class="form-label" for="form3Example4">Password</label>
+              <p class="text-danger" *ngIf="(ref.submitted || refPassword.touched) && refPassword.errors?.required">* Password is required</p>
+              <p class="text-danger" *ngIf="(ref.submitted || refPassword.touched) && refPassword.errors?.pattern">* Password must contain 8 or more characters that are of at least one number,one uppercase and lowercase letter.</p>
+              <input type="password" id="pw" class="form-control" name="password"  ngModel required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" #refPassword="ngModel">
+              <label class="form-label" for="pw">Password</label>
             </div>
 
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-center mb-4">
-              <input class="form-check-input me-2" type="checkbox" name="Checkbox" id="form2Example3" checked  ngModel/>
-              <label class="form-check-label" for="form2Example3">
+              <input class="form-check-input me-2" type="checkbox" name="Checkbox" id="check" checked  ngModel/>
+              <label class="form-check-label" for="check">
                 Subscribe to our newsletter
               </label>
             </div>
@@ -166,9 +172,10 @@
             </button>
             </form>
           </div>
+          <h6 class="text-center text-white">Already a Registered user? <a class="text-white" (click)="IfRegisteredUser()">login</a></h6>
         </div>
 
-            <!-- Register buttons -->
+            <!-- signup with other platforms buttons -->
             <div class="text-center">
               <p>or sign up with:</p>
               <button type="button" class="btn btn-primary btn-floating mx-1">

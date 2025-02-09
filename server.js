@@ -3,6 +3,7 @@ const app = exp();
 const path = require("path")
 
 
+
 //connect angular app with express server
 app.use(exp.static(path.join(__dirname, './dist/frontendproject1/')))
 
@@ -10,40 +11,40 @@ app.use(exp.static(path.join(__dirname, './dist/frontendproject1/')))
 const userApi = require("./APIS/user-api")
 const adminApi = require('./APIS/admin-api')
 //import MongoCLient
-const mc = require("mongodb").MongoClient;
+const { MongoClient } = require("mongodb");
 
 
 
 //connection string
-const databaseUrl ="mongodb+srv://siddhu:siddhu@backend.tsjcp.mongodb.net/backend?retryWrites=true&w=majority"
+const databaseUrl = "mongodb+srv://anudeepeloori:Deepumongodb@clusterfree.xkkem.mongodb.net/WatchNextMovies?retryWrites=true&w=majority";
 
-//const databaseUrl="mongodb://<username>:<password>@cluster0-shard-00-00.rjvoz.mongodb.net:27017,cluster0-shard-00-01.rjvoz.mongodb.net:27017,cluster0-shard-00-02.rjvoz.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority"
+(async () => {
+    try {
+        const client = new MongoClient(databaseUrl);
+        await client.connect();
+        console.log("✅ Successfully connected to MongoDB Atlas");
 
+        // Get database object
+        const databaseObj = client.db("WatchNextMovies");
 
+        // Create collection objects
+        const userCollectionObj = databaseObj.collection("usercollection");
+        const ratingCollection = databaseObj.collection("ratingcollection");
+        const contactsCollection = databaseObj.collection("contactscollection");
+        const reviewCollection = databaseObj.collection("reviewCollection");
 
-//connect to DB
-mc.connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+        // Store in app locals
+        app.set("userCollectionObj", userCollectionObj);
+        app.set("ratingcollection", ratingCollection);
+        app.set("contactscollection", contactsCollection);
+        app.set("reviewCollection", reviewCollection);
 
-    if (err) {
-        console.log("err in db connection", err);
+        console.log("✅ Database and collections set up");
+    } catch (err) {
+        console.error("❌ MongoDB connection error:", err);
+        process.exit(1); // Exit process if DB connection fails
     }
-    else {
-        //get database object
-        let databaseObj = client.db("backend")
-        //create usercollection object
-
-        let userCollectionObj = databaseObj.collection("usercollection")
-        let ratingcollection = databaseObj.collection("ratingcollection")
-        let contactscollection= databaseObj.collection("contactscollection")
-
-        app.set("userCollectionObj", userCollectionObj)
-        app.set("ratingcollection", ratingcollection)
-        app.set("contactscollection", contactscollection)
-
-        console.log("connected to database")
-
-    }
-})
+})();
 
 
 

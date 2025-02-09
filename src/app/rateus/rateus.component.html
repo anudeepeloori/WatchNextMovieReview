@@ -1,5 +1,12 @@
-<p>RATE OUR APPLICATION</p>
-<form #ref="ngForm" (ngSubmit)="onsubmit(ref.value)" class="w-75 mx-auto mt-5">
+
+
+<div class="container text-center text-white mt-5 mb-3">
+    <h1 class="text-white">RATE OUR APPLICATION</h1>
+</div>
+
+
+
+<form #ref="ngForm" (ngSubmit)="onsubmit(ref.value)" class="w-75 mx-auto mt-5 mb-5">
     
     <div class="form-floating mb-3">
         <input type="username" class="form-control" id="username" placeholder="name@example.com" name="username"
@@ -7,8 +14,24 @@
         <label for="username">Username</label>
     </div>
     <div class="form-floating mb-3">
-        <input type="number" class="form-control" id="rating" placeholder="rating" name="rating" ngModel>
-        <label for="rating">rate us</label>
+        <input type="number" 
+               class="form-control" 
+               id="rating" 
+               placeholder="rating" 
+               name="rating" 
+               ngModel 
+               min="1" 
+               max="5" 
+               step="1" 
+               required
+               #ratingInput="ngModel">
+        <label for="rating">Rate us (1-5)</label>
+    
+        <!-- Error Message -->
+        <div *ngIf="ratingInput.invalid && ratingInput.touched" class="text-danger mt-2">
+            <small *ngIf="ratingInput.errors?.required">Rating is required.</small>
+            <small *ngIf="ratingInput.errors?.min || ratingInput.errors?.max">Rating must be between 1 and 5.</small>
+        </div>
     </div>
 
     <button class="btn btn-success" type="submit">submit</button>

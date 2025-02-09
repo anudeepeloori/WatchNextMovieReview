@@ -11,12 +11,12 @@ import {DataService} from '../data.service' ;
 export class ViewmoviesComponent implements OnInit {
 
   myData:Item;
-  constructor(private itemObj:DataService , private ar:ActivatedRoute) { }
+  constructor(private ds:DataService , private ar:ActivatedRoute) { }
 
   ngOnInit(): void {
  
     let id=this.ar.snapshot.params.id;
-    this.itemObj.getItemsDataById(id).subscribe(
+    this.ds.getMoviesDataById(id).subscribe(
       items=>{
         this.myData=items;
       },

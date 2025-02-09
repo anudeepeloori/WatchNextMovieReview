@@ -46,19 +46,23 @@
 
 <div class="container" >
     <div class=" row m-2 mt-5 mb-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" >
-        <div class="col" *ngFor="let itemObj of myData | search:searchTerm | paginate:{itemsPerPage: 16, currentPage: p} ">
+        <div class="col" *ngFor="let movieObj of movieData | search:searchTerm | paginate:{itemsPerPage: 16, currentPage: p} ">
             <div class="card mt-4 mb-4">
-                <img height="300px" width="365px" src="{{itemObj.image}}" class="card-img-top" >
+                <img height="300px" width="365px" src="{{movieObj.image}}" class="card-img-top" >
                  
                 <div class="card-body" >
-                    <h6>{{itemObj.title}}</h6>
+                    <h6>{{movieObj.title}}</h6>
                     <div class="btn-group border rounded">
-                      <button class="btn btn-sm border-end border-light btn-outline-info btn-dark text-white" (click)="onSelectId(itemObj.id)" routerLink="viewmovies" routerLinkActive="active">view</button>
-                      <button class="btn btn-sm  border-light btn-outline-info btn-dark text-white " data-bs-target="#mdl" data-bs-toggle="modal" >Rate</button>
-                     </div>
-                    
+                      <button class="btn btn-sm border-end border-light btn-outline-info btn-dark text-white" (click)="onSelectId(movieObj.id)" routerLink="viewmovies" routerLinkActive="active">view</button>
+                      <button 
+                      class="btn btn-sm border-light btn-outline-info btn-dark text-white" 
+                      (click)="openReviewModal(movieObj.id)"  
+                      data-bs-target="#mdl" 
+                      data-bs-toggle="modal">
+                       Rate
+                      </button>
+                    </div>  
                 </div>
-                
               </div>
         </div>
 
@@ -85,44 +89,55 @@
 
 
         <!--modal for rating -->
-        <div class="modal fade" id="mdl" data-bs-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" >
-                
-                <div class="modal-content" style="background-image: url('assets/image 8.jpeg');" >
 
-                    <div class="modal-header text-white">
-                         Review
-                        <button class="btn btn-danger d-inline float-end" data-bs-dismiss="modal">X</button>
-                    </div>
-                    
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label text-white">Email </label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Email id" name="email" >
-                          </div>
-                          <div class="mb-3">
-                            <label  for="exampleFormControlTextarea1" class="form-label text-white">Review</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="textarea" ></textarea>
-                          </div>
-
-                          <!--rating -->
-                        <div>
-                          <label for="exampleFormControlTextarea2" class="form-label d-block">Rate : </label>
-                          <ngb-rating [max]="5" [(rate)]="starRating" [readonly]="false" name="rating" ></ngb-rating>
-                          
-                        </div>
-                      
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-success d-inline float-start " data-bs-dismiss="modal">Submit</button>
-                        <button class="btn btn-danger d-inline float-end" data-bs-dismiss="modal">Close</button>
-                    </div>
-                    
+        <form #ref="ngForm" (ngSubmit)="onSubmitReview()">
+          <div class="modal fade" id="mdl" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content" style="background-image: url('assets/image 8.jpeg');">
+                <div class="modal-header text-white">
+                  Review
+                  <button class="btn btn-danger d-inline float-end" data-bs-dismiss="modal">X</button>
                 </div>
+        
+                <div class="modal-body">
+                  <!-- Review -->
+                  <div class="mb-3">
+                    <label for="reviewText" class="form-label text-white">Review</label>
+                    <textarea 
+                      class="form-control" 
+                      id="reviewText" 
+                      rows="3" 
+                      name="reviewText" 
+                      [(ngModel)]="reviewData.reviewText">
+                    </textarea>
+                  </div>
+        
+                  <!-- Rating -->
+                  <div>
+                    <label for="starRating" class="form-label d-block">Rate:</label>
+                    <ngb-rating 
+                      [max]="5" 
+                      [(ngModel)]="reviewData.starRating" 
+                      name="starRating" 
+                      required>
+                    </ngb-rating>
+                  </div>
+                </div>
+        
+                <div class="modal-footer">
+                  <button class="btn btn-success d-inline float-start"  type="submit">Submit</button>
+                  <button class="btn btn-danger d-inline float-end" data-bs-dismiss="modal">Close</button>
+                </div>
+        
+              </div>
             </div>
-        </div>
+          </div>
+        </form>
+        
+
+
+
+        
 
 
 

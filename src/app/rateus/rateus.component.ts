@@ -20,9 +20,8 @@ export class RateusComponent implements OnInit {
           alert("thanks for rating us")
         }
         else{
-          alert("you already rated us")
+          alert("your rating updated")
         }
-        
       },
       err=>{
         console.log(err)

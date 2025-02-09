@@ -1,5 +1,5 @@
 const exp=require('express')
-
+const { ObjectId } = require('mongodb');
 const userApi=exp.Router();
 const errorhandler= require("express-async-handler")
 const bcryptjs=require("bcryptjs")
@@ -10,23 +10,14 @@ require("dotenv").config()
 userApi.use(exp.json())
 
 
-
-
-
-//getuser by asycn and await
+//getuser
 userApi.get('/getusers',errorhandler(async(req,res)=>{
-
     let userCollectionObj = req.app.get("userCollectionObj")
     let userlist= await userCollectionObj.find().toArray()
-    
     res.send({message:userlist})
 }))
 
-
-
-
-
-//get user by username using async and await
+//get user by username 
 userApi.get('/getuser/:username',errorhandler(async(req,res)=>{
     let userCollectionObj = req.app.get("userCollectionObj")
     let un=req.params.username
@@ -40,10 +31,7 @@ userApi.get('/getuser/:username',errorhandler(async(req,res)=>{
 }))
 
 
-
-
-
-//creating a new user with async and await
+//creating a new user
 userApi.post("/createuser",errorhandler(async(req,res)=>{
     let userCollectionObj = req.app.get("userCollectionObj")
     newuser=req.body;
@@ -63,32 +51,7 @@ userApi.post("/createuser",errorhandler(async(req,res)=>{
 }))
 
 
-//taking rating from user
-userApi.post("/movierating",errorhandler(async(req,res)=>{
-    let ratingcollectionobj = req.app.get("ratingcollection")
-    rating=req.body;
-    let user= await ratingcollectionobj.findOne({username:rating.username})
-    if(user===null){
-        //insert
-       await ratingcollectionobj.insertOne(rating)
-        res.send({message:"rating is successfull"})
-    }
-    else{
-        res.send({message:"user already gave rating"})
-    }
-}))
-
-userApi.get("/ratings",errorhandler(async(req,res)=>{
-    let ratingcollectionobj = req.app.get("ratingcollection")
-    let ratinglist= await ratingcollectionobj.find().toArray()
-    
-    res.send({message:ratinglist})
-    
-}))
-
-
-
-
+//login 
 userApi.post("/login",errorhandler(async(req,res)=>{
     let userCollectionObj = req.app.get("userCollectionObj")
     let credentials=req.body;
@@ -110,12 +73,101 @@ userApi.post("/login",errorhandler(async(req,res)=>{
     }
 }))
 
+//contact us
 userApi.post("/contactform", errorhandler(async(req,res)=>{
     let contactscollection = req.app.get("contactscollection")
     query=req.body;
     await contactscollection.insertOne(query)
     res.send({message:"your query successfully submitted"})
-
 }))
+
+//post App ratings
+userApi.post("/apprating",errorhandler(async(req,res)=>{
+    let ratingcollectionObj=req.app.get("ratingcollection")
+    const rating=req.body;
+    let userRating=await ratingcollectionObj.findOne({username:rating.username})
+    if(userRating===null){
+        await ratingcollectionObj.insertOne(rating)
+        res.send({message:"rating is successfull"})
+    }
+    else{
+        await ratingcollectionObj.updateOne(
+            { username: rating.username }, 
+            { $set: { rating: rating.rating, updatedAt: new Date() } }
+        );
+        res.send({ message: "Your rating was updated" });
+    }
+    
+}))
+
+//get App ratings
+userApi.get("/getappratings",errorhandler(async(req,res)=>{
+    let ratingcollectionobj = req.app.get("ratingcollection")
+    let ratinglist= await ratingcollectionobj.find().toArray()
+    res.send({message:ratinglist})
+}))
+
+
+//post movie ratings
+userApi.post("/submitreview", errorhandler(async (req, res) => {
+    let reviewCollection = req.app.get("reviewCollection"); // Get collection
+
+    const { username, movieId, reviewText, rating } = req.body;
+
+    if (!username || !movieId) {
+        return res.send({ message: "Username and movieId are required." });
+    }
+
+    const existingReview = await reviewCollection.findOne({
+        username: username,
+        movieId: movieId, 
+    });
+
+    if (existingReview) {
+        await reviewCollection.updateOne(
+            { username: username, movieId: movieId },
+            { $set: { reviewText, rating, updatedAt: new Date() } }
+        );
+        return res.send({ message: "Review updated successfully." });
+    }
+
+    const result = await reviewCollection.insertOne({
+        username,
+        movieId, // Keep as a string
+        reviewText,
+        rating,
+        createdAt: new Date()
+    });
+
+    res.send({ message: "Review submitted successfully.", reviewId: result.insertedId });
+}));
+
+
+
+//get movie ratings
+userApi.get("/getmoviereview/:username/:movieId", errorhandler(async (req, res) => {
+    let reviewCollection = req.app.get("reviewCollection");
+
+    const { username, movieId } = req.params;
+
+    if (!username || !movieId) {
+        return res.send({ message: "Invalid username or movieId." });
+    }
+
+    const review = await reviewCollection.findOne({
+        username: username,
+        movieId: movieId, 
+    });
+
+    if (review) {
+        res.send(review);
+    } else {
+        res.send({ message: "No review found." });
+    }
+}));
+
+
+
+
 
 module.exports=userApi
