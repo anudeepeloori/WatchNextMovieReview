@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Item } from '../models/item.model';
 import { DataService } from '../data.service';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-movies',
@@ -28,7 +29,7 @@ export class MoviesComponent implements OnInit {
     reviewText: ''
   };
 
-  constructor(private ds: DataService, private router: Router, private hc: HttpClient) {}
+  constructor(private ds: DataService, private router: Router, private hc: HttpClient, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     // Fetch movie data
@@ -72,7 +73,8 @@ export class MoviesComponent implements OnInit {
     this.username = localStorage.getItem("username");
 
     if (!this.username) {
-        alert("User not logged in. Please log in to rate movies.");
+        //alert("User not logged in. Please log in to rate movies.");
+        this.toastr.warning("User not logged in. Please log in to rate movies.", "Warning");
         //console.error("Username is null. Cannot proceed.");
         return;
     }
@@ -107,7 +109,8 @@ export class MoviesComponent implements OnInit {
   onSubmitReview() {
     //console.log("Submitting Review with Data:", this.reviewData);
     if (!this.reviewData.movieId || !this.reviewData.username) {
-      alert("Error: Missing movie or user information.");
+      //alert("Error: Missing movie or user information.");
+      this.toastr.warning("Error: Missing movie or user information.", "Warning");
       return;
     }
 
@@ -116,7 +119,8 @@ export class MoviesComponent implements OnInit {
     this.ds.submitReview(this.reviewData).subscribe(
       (res) => {
         console.log("Review submitted successfully", res);
-        alert(res.message);
+        //alert(res.message);
+        this.toastr.success(res.message, "Success");
 
         // Close modal manually after successful submission
         let modal = document.getElementById('mdl');

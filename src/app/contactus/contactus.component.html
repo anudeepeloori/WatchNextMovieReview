@@ -2,7 +2,7 @@
 <hr class="text-white">
 
 
-<h4 class="mt-3 p-5 text-warning">
+<h4 class="mt-3 p-5 text-warning" style="background-color: rgba(0, 0, 0, 0.8);">
 Thank you for your interest in our services. Please provide the following information about your needs to help us serve you better.
  This information will enable us to route your request to the appropriate person. You should receive a response within 48 hours.
 </h4>
@@ -12,32 +12,35 @@ Thank you for your interest in our services. Please provide the following inform
     <h2 class="text-center mt-5">Contact Us</h2>
     <div class="col-sm-2 col-md-3"></div>
     <div class="col-sm-8 col-md-6">
-        <form #ref="ngForm" (ngSubmit)="contactform(ref.value); " >
+        <form #ref="ngForm" (ngSubmit)="ref.form.valid && contactform(ref.value); " >
             <div class="mb-3">
-                <label for="fn" class="form-label">username</label>
-                <input type="text" class="form-control" id="fn" name="username" ngModel >
+                <label for="un" class="form-label">username</label>
+                <input type="text" class="form-control" id="un" name="username" required #refUsername="ngModel"  ngModel>
+                <p class="text-danger" *ngIf="(ref.submitted || refUsername.touched) && refUsername.errors?.required">* username is required</p>
             </div>
             
-
             <div class="mb-3">
                 <label for="em" class="form-label">Email</label>
-                <input type="email" class="form-control" id="em" name="email" ngModel>
+                <input type="email" class="form-control" id="em" name="email" required #refEmail="ngModel" ngModel>
+                <p class="text-danger" *ngIf="(ref.submitted || refEmail.touched) && refEmail.errors?.required">* Email is required, so we can get back to you</p>
             </div>
 
             <div class="mb-3">
                 <label for="ques" class="form-label">Questions</label>
-                <input type="text" class="form-control" id="ques"  name="questions" ngModel>
+                <input type="text" class="form-control" id="ques"  name="questions" required #refQuestion="ngModel" ngModel>
+                <p class="text-danger" *ngIf="(ref.submitted || refQuestion.touched) && refQuestion.errors?.required">* please enter your query</p>
             </div>
 
             <div class="mb-3">
                 <label for="comp" class="form-label">Complaints</label>
-                <input type="text" class="form-control" id="comp"  name="complaints" ngModel>
+                <input type="text" class="form-control" id="comp"  name="complaints" required #refComplaints="ngModel" ngModel>
+                <p class="text-danger" *ngIf="(ref.submitted || refComplaints.touched) && refComplaints.errors?.required">* please list your complaints</p>
             </div>
 
-
             <div class="form-check mt-5">
-                <input type="checkbox" name="polocies" class="form-check-input" id="check" ngModel>
-                <label for="check" class="form-check-label">I confirm, I have read and agreeto the company's private policy and consent to sharing my information</label>
+                <input type="checkbox" name="policies" class="form-check-input" id="check" required #refCheckbox="ngModel" ngModel>
+                <label for="check" class="form-check-label">I confirm, I have read and agree to the company's private policy and consent to sharing my information</label>
+                <p class="text-danger" *ngIf="(ref.submitted || refCheckbox.touched) && refCheckbox.errors?.required">* please agree to our company's private policy</p>
             </div>
 
             <div class="form-check mt-3">

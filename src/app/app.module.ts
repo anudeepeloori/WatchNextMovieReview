@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Required for Toastr
+import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { MoviesComponent } from './movies/movies.component';
@@ -19,6 +21,8 @@ import { LoginComponent } from './login/login.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { RateusComponent } from './rateus/rateus.component';
 import { SeeratingsComponent } from './seeratings/seeratings.component';
+
+
 
 @NgModule({
   declarations: [
@@ -44,6 +48,8 @@ import { SeeratingsComponent } from './seeratings/seeratings.component';
     HttpClientModule,
     NgxPaginationModule,
     NgbModule,
+    BrowserAnimationsModule, 
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

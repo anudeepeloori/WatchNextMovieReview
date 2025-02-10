@@ -43,10 +43,10 @@ userApi.post("/createuser",errorhandler(async(req,res)=>{
         newuser.password=hashedpassword
         //insert
        await userCollectionObj.insertOne(newuser)
-        res.send({message:"regestration is successfull"})
+        res.send({message:"Regestration successfull"})
     }
     else{
-        res.send({message:"user already existed"})
+        res.send({message:"user already existed, please try different username"})
     }
 }))
 

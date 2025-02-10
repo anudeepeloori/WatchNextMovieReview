@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../data.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { DataService } from '../data.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private ds:DataService,private router:Router ) { }
+  constructor(private ds:DataService,private router:Router, private toastr:ToastrService ) { }
 
   ngOnInit(): void {
   }
@@ -23,12 +24,14 @@ export class HomeComponent implements OnInit {
             this.router.navigateByUrl('/login')
         }
         else{
-          alert(res.message)
+          //alert(res.message)
+          this.toastr.info(res.message,"Error")
         }
       },
       err=>{
         console.log(err)
-        alert("Something went wrong in user creation")
+        //alert("Something went wrong in user creation")
+        this.toastr.error("Something went wrong in user creation","Error")
       }
     )
   }

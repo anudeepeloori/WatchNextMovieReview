@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../data.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { DataService } from '../data.service';
 export class LoginComponent implements OnInit {
 
   //inject UserService obj
-  constructor(private ds:DataService,private router:Router) { }
+  constructor(private ds:DataService,private router:Router, private toastr:ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -38,7 +39,8 @@ export class LoginComponent implements OnInit {
 
         }
         else{
-          alert(res.message)
+          //alert(res.message)
+          this.toastr.error(res.message, "Error");
         }
       },
       err=>{
