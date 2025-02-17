@@ -167,6 +167,31 @@ userApi.get("/getmoviereview/:username/:movieId", errorhandler(async (req, res) 
 }));
 
 
+// Get average rating of a movie
+userApi.get("/getaveragerating/:movieId", errorhandler(async (req, res) => {
+    let reviewCollection = req.app.get("reviewCollection");
+    const { movieId } = req.params;
+    // console.log("Fetching average rating for movieId:", movieId); // ✅ Debug log
+    const result = await reviewCollection.aggregate([
+        { $match: { movieId: movieId } },
+        { $group: { _id: "$movieId", avgRating: { $avg: "$rating" } } }
+    ]).toArray();
+    // console.log("Aggregation result:", result); // ✅ Debug log
+    if (result.length > 0) {
+        res.send({ avgRating: result[0].avgRating.toFixed(1) });
+    } else {
+        res.send({ avgRating: 0 });
+    }
+}));
+
+// Get all reviews for a movie
+userApi.get("/getallreviews/:movieId", errorhandler(async (req, res) => {
+    let reviewCollection = req.app.get("reviewCollection");
+    const { movieId } = req.params;
+
+    const reviews = await reviewCollection.find({ movieId: movieId }).toArray();
+    res.send(reviews);
+}));
 
 
 

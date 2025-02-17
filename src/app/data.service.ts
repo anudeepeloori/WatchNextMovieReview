@@ -73,7 +73,7 @@ export class DataService {
     return this.hc.post("/user/submitreview", {
         username: reviewData.username, // Use username instead of userId
         movieId: reviewData.movieId,
-        starRating: reviewData.starRating,
+        rating: reviewData.starRating,
         reviewText: reviewData.reviewText
     });
 }
@@ -81,7 +81,17 @@ export class DataService {
   getReviewByUserAndMovie(username: string, movieId: string): Observable<any> {
     return this.hc.get(`/user/getmoviereview/${username}/${movieId}`);
   }
-  
- 
-  
+
+  // Fetch average rating of a movie
+getAverageRating(movieId: string): Observable<{ avgRating: number }> {
+  return this.hc.get<{ avgRating: number }>(`/user/getaveragerating/${movieId}`);
+}
+
+// Fetch all reviews for a movie
+getAllReviews(movieId: string): Observable<any[]> {
+  return this.hc.get<any[]>(`/user/getallreviews/${movieId}`);
+}
+
+
+
 }

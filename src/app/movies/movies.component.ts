@@ -29,6 +29,28 @@ export class MoviesComponent implements OnInit {
     reviewText: ''
   };
 
+
+
+
+
+
+
+// Stores average ratings
+avgRatings: { [movieId: string]: number } = {};
+// Stores reviews for selected movie
+selectedMovieReviews: any[] = [];
+selectedMovieAvgRating: number = 0;
+selectedMovieTitle: string = '';
+
+
+
+
+
+
+
+
+
+
   constructor(private ds: DataService, private router: Router, private hc: HttpClient, private toastr: ToastrService) {}
 
   ngOnInit(): void {
@@ -106,6 +128,7 @@ export class MoviesComponent implements OnInit {
 
 
   // Submit Review -Update if Exists,Otherwise Insert
+
   onSubmitReview() {
     //console.log("Submitting Review with Data:", this.reviewData);
     if (!this.reviewData.movieId || !this.reviewData.username) {
@@ -143,5 +166,42 @@ export class MoviesComponent implements OnInit {
         console.error("Error saving review", err);
       }
     );
+  }
+
+
+// Fetch average ratings for each movie
+fetchAverageRatings() {
+  this.movieData.forEach((movie) => {
+    this.ds.getAverageRating(movie.id).subscribe(
+      (rating) => {
+        this.avgRatings[movie.id] = rating.avgRating;
+      },
+      (err) => {
+        this.avgRatings[movie.id] = 0;
+      }
+    );
+  });
 }
+
+// Fetch all reviews and average rating for selected movie
+openRatingsModal(movieId: string, title: string) {
+  this.selectedMovieTitle = title;
+  this.ds.getAllReviews(movieId).subscribe(
+    (reviews) => {
+      this.selectedMovieReviews = reviews;
+    },
+    (err) => {}
+  );
+
+  this.ds.getAverageRating(movieId).subscribe(
+    (rating) => {
+      this.selectedMovieAvgRating = rating.avgRating;
+    },
+    (err) => {
+      this.selectedMovieAvgRating = 0;
+    }
+  );
+}
+
+
 }

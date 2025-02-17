@@ -1,7 +1,6 @@
-
 <!--serach Bar -->
 
-<input type="text" name="movieTitle" placeholder="Search by Keyword" class="form-control mt-5" [(ngModel)]="searchTerm">
+<input type="text" name="movieTitle" placeholder="Search by movie name" class="form-control mt-5" [(ngModel)]="searchTerm">
 
 <!--carousel-->
 
@@ -53,13 +52,26 @@
                 <div class="card-body" >
                     <h6>{{movieObj.title}}</h6>
                     <div class="btn-group border rounded">
-                      <button class="btn btn-sm border-end border-light btn-outline-info btn-dark text-white" (click)="onSelectId(movieObj.id)" routerLink="viewmovies" routerLinkActive="active">view</button>
+                      <button 
+                        class="btn btn-sm border-end border-light btn-outline-info btn-dark text-white" 
+                        (click)="onSelectId(movieObj.id)" 
+                        routerLink="viewmovies" 
+                        routerLinkActive="active">
+                        view
+                      </button>
                       <button 
                       class="btn btn-sm border-light btn-outline-info btn-dark text-white" 
                       (click)="openReviewModal(movieObj.id)"  
                       data-bs-target="#mdl" 
                       data-bs-toggle="modal">
                        Rate
+                      </button>
+
+                      <button class="btn btn-sm border-light btn-outline-info btn-dark text-white"
+                        (click)="openRatingsModal(movieObj.id, movieObj.title)"
+                        data-bs-target="#ratingModal"
+                        data-bs-toggle="modal">
+                        Ratings
                       </button>
                     </div>  
                 </div>
@@ -134,11 +146,47 @@
           </div>
         </form>
         
+      
+         <!-- Modal for Viewing Ratings & Reviews -->
+<div class="modal fade" id="ratingModal" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reviews for {{selectedMovieTitle}}</h5>
+        <button class="btn btn-danger" data-bs-dismiss="modal">X</button>
+      </div>
 
+      <div class="modal-body">
+        <h6>Average Rating: {{ selectedMovieAvgRating || 'N/A' }} ⭐ / 5 ⭐</h6>
+        <div *ngIf="selectedMovieReviews.length > 0; else noReviews">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Rating</th>
+                <th>Review</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let review of selectedMovieReviews">
+                <td>{{ review.username }}</td>
+                <td>{{ review.rating }} ⭐</td>
+                <td>{{ review.reviewText }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noReviews>
+          <p class="text-muted">No reviews available for this movie.</p>
+        </ng-template>
+      </div>
 
-
-        
-
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
      </div> 
