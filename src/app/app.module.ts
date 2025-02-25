@@ -21,6 +21,8 @@ import { LoginComponent } from './login/login.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { RateusComponent } from './rateus/rateus.component';
 import { SeeratingsComponent } from './seeratings/seeratings.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+// import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 
@@ -39,7 +41,9 @@ import { SeeratingsComponent } from './seeratings/seeratings.component';
     LoginComponent,
     UserprofileComponent,
     RateusComponent,
-    SeeratingsComponent
+    SeeratingsComponent,
+    ForgotPasswordComponent,
+    // ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

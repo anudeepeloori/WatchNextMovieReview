@@ -12,6 +12,8 @@ import { SeeratingsComponent } from './seeratings/seeratings.component';
 import { TopimdbComponent } from './topimdb/topimdb.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { ViewmoviesComponent } from './viewmovies/viewmovies.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+// import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {path:'home',component:HomeComponent},
@@ -21,12 +23,12 @@ const routes: Routes = [
   {path:'topimdb',component:TopimdbComponent},
   {path:'contactus',component:ContactusComponent},
   {path:'login',component:LoginComponent},
+  {path:'forgot-password',component:ForgotPasswordComponent},
+  // {path:'reset-password/:token',component:ResetPasswordComponent},
   {path:'userprofile',component:UserprofileComponent,children:[
     {path:'rateus',component:RateusComponent},
     {path:'seeratings',component:SeeratingsComponent},
     {path:'',redirectTo:'/userprofile/rateus',pathMatch:'full'},
-
-  
   ]},
   {path:'',redirectTo:'/home',pathMatch:'full'},
   {path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),canActivate:[AdminGuard] },

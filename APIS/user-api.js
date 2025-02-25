@@ -194,5 +194,84 @@ userApi.get("/getallreviews/:movieId", errorhandler(async (req, res) => {
 }));
 
 
+//Forgot password code below
+const nodemailer = require("nodemailer");
+
+// Temporary OTP storage (In real app, store in DB with expiry)
+const otpStorage = {};
+
+// ✅ Create Nodemailer Transporter
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,  // Set this in .env
+        pass: process.env.EMAIL_PASS,  // Set this in .env
+    },
+});
+
+// ✅ Send OTP
+userApi.post("/forgot-password", errorhandler(async (req, res) => {
+    const { email } = req.body;
+    let userCollectionObj = req.app.get("userCollectionObj");
+
+    // ✅ Check if user exists
+    const user = await userCollectionObj.findOne({ email });
+    if (!user) {
+        return res.send({ message: "User not found!" });
+    }
+
+    // ✅ Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    otpStorage[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 }; // Expire in 10 mins
+
+    // ✅ Email Content
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Password Reset OTP",
+        text: `Your OTP for password reset is: ${otp}. It expires in 10 minutes.`,
+    };
+
+    // ✅ Send Email
+    await transporter.sendMail(mailOptions);
+
+    res.send({ message: "OTP sent to your email!" });
+}));
+
+
+userApi.post("/verify-otp", errorhandler(async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!otpStorage[email]) {
+        return res.send({ message: "OTP expired or invalid!" });
+    }
+
+    if (otpStorage[email].otp != otp) {
+        return res.send({ message: "Invalid OTP!" });
+    }
+
+    res.send({ message: "OTP verified successfully!" });
+}));
+
+
+
+userApi.post("/reset-password", errorhandler(async (req, res) => {
+    const { email, newPassword } = req.body;
+    let userCollectionObj = req.app.get("userCollectionObj");
+
+    // ✅ Hash new password
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+
+    // ✅ Update password in DB
+    await userCollectionObj.updateOne({ email }, { $set: { password: hashedPassword } });
+
+    // ✅ Remove OTP
+    delete otpStorage[email];
+
+    res.send({ message: "Password reset successful! You can now login." });
+}));
+
+
+
 
 module.exports=userApi

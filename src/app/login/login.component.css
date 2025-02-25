@@ -3,4 +3,11 @@ h1 {
     text-shadow: 2px 2px 4px #e62626;
   }
 
+  .forgot-password {
+    cursor: pointer;
+    text-decoration: underline; /* Optional: Makes it look more like a link */
+  }
   
+  .forgot-password:hover {
+    color: #f8f410; /* Optional: Changes color on hover */
+  }

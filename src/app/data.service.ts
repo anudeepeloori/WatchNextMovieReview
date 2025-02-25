@@ -94,4 +94,23 @@ getAllReviews(movieId: string): Observable<any[]> {
 
 
 
+//send OTP
+sendOTP(email: string): Observable<any> {
+  return this.hc.post("/user/forgot-password", { email });
+}
+
+
+//verify OTP
+verifyOTP(email: string, otp: string): Observable<any> {
+  return this.hc.post("/user/verify-otp", { email, otp });
+}
+
+
+//Reset password
+resetPassword(email: string, newPassword: string): Observable<any> {
+  return this.hc.post("/user/reset-password", { email, newPassword });
+}
+
+
+
 }
