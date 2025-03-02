@@ -16,7 +16,8 @@ const { MongoClient } = require("mongodb");
 
 
 //connection string
-const databaseUrl = "mongodb+srv://anudeepeloori:Deepumongodb@clusterfree.xkkem.mongodb.net/WatchNextMovies?retryWrites=true&w=majority";
+const databaseObjFromEnv=process.env.MONGO_URL
+const databaseUrl = databaseObjFromEnv;
 
 (async () => {
     try {
@@ -69,5 +70,5 @@ app.use((err, req, res, next) => {
 
 
 //assign port
-const port = 1000
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`server on ${port}...`))

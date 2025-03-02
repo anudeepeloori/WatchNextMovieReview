@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http' ;
 import{Observable, forkJoin} from 'rxjs';
 import { Item } from './models/item.model';
 import { map } from 'rxjs/operators'; 
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -49,12 +50,9 @@ export class DataService {
   }
 
 
-
-
-
-
   //TMDB
-  private apiKey = '2ce2796f1376f76fb5ff2af4de56665c'; 
+
+  private apiKey = environment.apiKey; // Fetch API key from environment file
   private baseUrl = 'https://api.themoviedb.org/3';
 
   // Fetch all movies using the TMDB Discover API

@@ -110,7 +110,7 @@ userApi.get("/getappratings",errorhandler(async(req,res)=>{
 
 //post movie ratings
 userApi.post("/submitreview", errorhandler(async (req, res) => {
-    let reviewCollection = req.app.get("reviewCollection"); // Get collection
+    let reviewCollection = req.app.get("reviewCollection"); 
 
     const { username, movieId, reviewText, rating } = req.body;
 
@@ -133,7 +133,7 @@ userApi.post("/submitreview", errorhandler(async (req, res) => {
 
     const result = await reviewCollection.insertOne({
         username,
-        movieId, // Keep as a string
+        movieId,
         reviewText,
         rating,
         createdAt: new Date()
@@ -232,7 +232,7 @@ userApi.post("/forgot-password", errorhandler(async (req, res) => {
         text: `Your OTP for password reset is: ${otp}. It expires in 10 minutes.`,
     };
 
-    // ✅ Send Email
+    // Send Email
     await transporter.sendMail(mailOptions);
 
     res.send({ message: "OTP sent to your email!" });

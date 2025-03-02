@@ -163,7 +163,7 @@ movies: any[] = []; // To store movies
 
        setTimeout(() => {
         window.location.reload(); // Reloads the current route 
-    }, 9000);
+    }, 500);
        
       },
       (err) => {
