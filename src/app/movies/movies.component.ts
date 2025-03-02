@@ -30,11 +30,6 @@ export class MoviesComponent implements OnInit {
   };
 
 
-
-
-
-
-
 // Stores average ratings
 avgRatings: { [movieId: string]: number } = {};
 // Stores reviews for selected movie
@@ -43,12 +38,8 @@ selectedMovieAvgRating: number = 0;
 selectedMovieTitle: string = '';
 
 
-
-
-
-
-
-
+//TMDB API
+movies: any[] = []; // To store movies
 
 
   constructor(private ds: DataService, private router: Router, private hc: HttpClient, private toastr: ToastrService) {}
@@ -64,7 +55,7 @@ selectedMovieTitle: string = '';
       }
     );
 
-     // Retrieve username from local storage
+    // Retrieve username from local storage
      this.username = localStorage.getItem("username");
 
     if (this.username) {
@@ -74,7 +65,20 @@ selectedMovieTitle: string = '';
         console.error("Please login to continue..");
     }
 
+
+    //TMDB 
+    this.loadMovies();
   }
+
+
+  //TMDB Movies
+  loadMovies() {
+    this.ds.getMoviesData().subscribe((response: any[]) => {
+      this.movies = response; // ✅ Directly assign response since it's already an array
+      //console.log(`Total Movies Fetched: ${this.movies.length}`, this.movies);
+    });
+  }
+
 
   // Navigate to specific movie details page
   onSelectId(id: string) {
@@ -86,7 +90,7 @@ selectedMovieTitle: string = '';
     //console.log("Opening review modal for movieId:", movieId);
 
     if (!movieId) {
-      console.error("Movie ID is missing. Aborting modal open.");
+      //console.error("Movie ID is missing. Aborting modal open.");
       alert("Error: Unable to open review modal. Movie ID is missing.");
       return;
     }
@@ -111,17 +115,17 @@ selectedMovieTitle: string = '';
     this.ds.getReviewByUserAndMovie(this.username, movieId).subscribe(
         (res) => {
             if (res) {
-                //console.log("Found existing review:", res);
+                console.log("Found existing review:", res);
                 this.reviewData.starRating = res.rating;
                 this.reviewData.reviewText = res.reviewText;
             } else {
-                //console.log("No existing review found, starting fresh.");
+                console.log("No existing review found, starting fresh.");
                 this.reviewData.starRating = 0;
                 this.reviewData.reviewText = "";
             }
         },
         (err) => {
-            //console.log("No existing rating found.");
+            console.log("No existing rating found.");
         }
     );
 }
@@ -130,7 +134,7 @@ selectedMovieTitle: string = '';
   // Submit Review -Update if Exists,Otherwise Insert
 
   onSubmitReview() {
-    //console.log("Submitting Review with Data:", this.reviewData);
+    console.log("Submitting Review with Data:", this.reviewData);
     if (!this.reviewData.movieId || !this.reviewData.username) {
       //alert("Error: Missing movie or user information.");
       this.toastr.warning("Error: Missing movie or user information.", "Warning");
@@ -159,7 +163,7 @@ selectedMovieTitle: string = '';
 
        setTimeout(() => {
         window.location.reload(); // Reloads the current route 
-    }, 500);
+    }, 9000);
        
       },
       (err) => {
@@ -168,8 +172,11 @@ selectedMovieTitle: string = '';
     );
   }
 
+  
+  
+  
 
-// Fetch average ratings for each movie
+//Fetch average ratings for each movie
 fetchAverageRatings() {
   this.movieData.forEach((movie) => {
     this.ds.getAverageRating(movie.id).subscribe(
@@ -183,7 +190,7 @@ fetchAverageRatings() {
   });
 }
 
-// Fetch all reviews and average rating for selected movie
+//Fetch all reviews and average rating for selected movie
 openRatingsModal(movieId: string, title: string) {
   this.selectedMovieTitle = title;
   this.ds.getAllReviews(movieId).subscribe(
@@ -202,6 +209,9 @@ openRatingsModal(movieId: string, title: string) {
     }
   );
 }
+
+
+
 
 
 }

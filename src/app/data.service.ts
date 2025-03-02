@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http' ;
-import{Observable} from 'rxjs';
+import{Observable, forkJoin} from 'rxjs';
 import { Item } from './models/item.model';
+import { map } from 'rxjs/operators'; 
 
 @Injectable({
   providedIn: 'root'
@@ -47,22 +48,55 @@ export class DataService {
     return this.hc.get("/user/getappratings")
   }
 
-  //get movies data
-  getMoviesData():Observable<any>{
-    return this.hc.get <any>("http://localhost:3000/items")
+
+
+
+
+
+  //TMDB
+  private apiKey = '2ce2796f1376f76fb5ff2af4de56665c'; 
+  private baseUrl = 'https://api.themoviedb.org/3';
+
+  // Fetch all movies using the TMDB Discover API
+  getMoviesData(): Observable<any[]> {
+    const totalPages = 10; // Fetch first 10 pages
+    let requests: Observable<any>[] = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      requests.push(this.hc.get<any>(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&page=${i}`));
+    }
+
+    return forkJoin(requests).pipe(
+      map(responses => responses.reduce((acc, response) => acc.concat(response.results), [])) // ✅ Use reduce instead of flatMap
+    );
   }
+  
+  //get movie data by id
+  getMoviesDataById(id: number): Observable<Item> {
+    return this.hc.get<Item>(`${this.baseUrl}/movie/${id}?api_key=${this.apiKey}`);
+  }
+
+  // get Top Rated Movies
+  getTopMoviesData(page: number = 1): Observable<any> {
+    return this.hc.get<any>(`${this.baseUrl}/movie/top_rated?api_key=${this.apiKey}&page=${page}`);
+  }
+  
+  //get movies data
+  // getMoviesData():Observable<any>{
+  //   return this.hc.get <any>("http://localhost:3000/items")
+  // }
 
   //get movied data by id
-  getMoviesDataById(id):Observable<Item>{
-    return this.hc.get <Item>('http://localhost:3000/items/'+id)
-  }
+  // getMoviesDataById(id):Observable<Item>{
+  //   return this.hc.get <Item>('http://localhost:3000/items/'+id)
+  // }
 
   //get top movies data
-  getTopMoviesData():Observable<Item>{
-    return this.hc.get <Item>("http://localhost:3000/topitems")
-  }
+  // getTopMoviesData():Observable<Item>{
+  //   return this.hc.get <Item>("http://localhost:3000/topitems")
+  // }
 
-  //add new movie
+  // add new movie
   createNewMovie(movieObj):Observable<any>{
     return this.hc.post("http://localhost:3000/item",movieObj)
   }
@@ -71,7 +105,7 @@ export class DataService {
   // Submit or update movie rating
   submitReview(reviewData: any): Observable<any> {
     return this.hc.post("/user/submitreview", {
-        username: reviewData.username, // Use username instead of userId
+        username: reviewData.username, 
         movieId: reviewData.movieId,
         rating: reviewData.starRating,
         reviewText: reviewData.reviewText

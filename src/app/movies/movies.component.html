@@ -45,7 +45,7 @@
 
 <div class="container" >
     <div class=" row m-2 mt-5 mb-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" >
-        <div class="col" *ngFor="let movieObj of movieData | search:searchTerm | paginate:{itemsPerPage: 16, currentPage: p} ">
+        <!-- <div class="col" *ngFor="let movieObj of movieData | search:searchTerm | paginate:{itemsPerPage: 16, currentPage: p} ">
             <div class="card mt-4 mb-4">
                 <img height="300px" width="365px" src="{{movieObj.image}}" class="card-img-top" >
                  
@@ -76,7 +76,54 @@
                     </div>  
                 </div>
               </div>
+        </div> -->
+
+        <div class="col" *ngFor="let movieObj of movies | search:searchTerm | paginate:{itemsPerPage: 16, currentPage: p}">
+          <div class="card mt-4 mb-4">
+            <!-- Movie Poster -->
+            <img 
+              height="300px" 
+              width="365px" 
+              [src]="'https://image.tmdb.org/t/p/w500' + movieObj.poster_path" 
+              class="card-img-top" 
+              alt="{{ movieObj.original_title }}">
+        
+            <div class="card-body">
+              <!-- Movie Title -->
+              <h6>{{ movieObj.original_title }}</h6>
+              
+              <div class="btn-group border rounded">
+                <!-- View Movie Details -->
+                <button 
+                  class="btn btn-sm border-end border-light btn-outline-info btn-dark text-white" 
+                  (click)="onSelectId(movieObj.id)" 
+                  routerLink="viewmovies" 
+                  routerLinkActive="active">
+                  View
+                </button>
+        
+                <!-- Open Review Modal -->
+                <button 
+                  class="btn btn-sm border-light btn-outline-info btn-dark text-white" 
+                  (click)="openReviewModal(movieObj.id)"  
+                  data-bs-target="#mdl" 
+                  data-bs-toggle="modal">
+                  Rate
+                </button>
+        
+                <!-- Open Ratings Modal -->
+                <button 
+                  class="btn btn-sm border-light btn-outline-info btn-dark text-white"
+                  (click)="openRatingsModal(movieObj.id, movieObj.title)"
+                  data-bs-target="#ratingModal"
+                  data-bs-toggle="modal">
+                  Ratings
+                </button>
+              </div>  
+            </div>
+          </div>
         </div>
+        
 
 
 
@@ -147,7 +194,7 @@
         </form>
         
       
-         <!-- Modal for Viewing Ratings & Reviews -->
+<!-- Modal for Viewing Ratings & Reviews -->
 <div class="modal fade" id="ratingModal" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
@@ -189,7 +236,7 @@
 </div>
 
 
-     </div> 
+</div> 
 
 
 <!--Pagination-->

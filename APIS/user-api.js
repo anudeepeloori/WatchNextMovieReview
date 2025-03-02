@@ -156,7 +156,7 @@ userApi.get("/getmoviereview/:username/:movieId", errorhandler(async (req, res) 
 
     const review = await reviewCollection.findOne({
         username: username,
-        movieId: movieId, 
+        movieId: Number(movieId), 
     });
 
     if (review) {
@@ -171,12 +171,12 @@ userApi.get("/getmoviereview/:username/:movieId", errorhandler(async (req, res) 
 userApi.get("/getaveragerating/:movieId", errorhandler(async (req, res) => {
     let reviewCollection = req.app.get("reviewCollection");
     const { movieId } = req.params;
-    // console.log("Fetching average rating for movieId:", movieId); // ✅ Debug log
+    // console.log("Fetching average rating for movieId:", movieId); // 
     const result = await reviewCollection.aggregate([
-        { $match: { movieId: movieId } },
+        { $match: { movieId: Number(movieId) } },
         { $group: { _id: "$movieId", avgRating: { $avg: "$rating" } } }
     ]).toArray();
-    // console.log("Aggregation result:", result); // ✅ Debug log
+    // console.log("Aggregation result:", result); // 
     if (result.length > 0) {
         res.send({ avgRating: result[0].avgRating.toFixed(1) });
     } else {
@@ -189,7 +189,7 @@ userApi.get("/getallreviews/:movieId", errorhandler(async (req, res) => {
     let reviewCollection = req.app.get("reviewCollection");
     const { movieId } = req.params;
 
-    const reviews = await reviewCollection.find({ movieId: movieId }).toArray();
+    const reviews = await reviewCollection.find({ movieId: Number(movieId)}).toArray();
     res.send(reviews);
 }));
 
@@ -200,7 +200,7 @@ const nodemailer = require("nodemailer");
 // Temporary OTP storage (In real app, store in DB with expiry)
 const otpStorage = {};
 
-// ✅ Create Nodemailer Transporter
+// Create Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -209,26 +209,26 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-// ✅ Send OTP
+// Send OTP
 userApi.post("/forgot-password", errorhandler(async (req, res) => {
     const { email } = req.body;
     let userCollectionObj = req.app.get("userCollectionObj");
 
-    // ✅ Check if user exists
+    // Check if user exists
     const user = await userCollectionObj.findOne({ email });
     if (!user) {
         return res.send({ message: "User not found!" });
     }
 
-    // ✅ Generate OTP
+    // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
     otpStorage[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 }; // Expire in 10 mins
 
-    // ✅ Email Content
+    // Email Content
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
-        subject: "Password Reset OTP",
+        subject: "Wicked Movies Account Password Reset",
         text: `Your OTP for password reset is: ${otp}. It expires in 10 minutes.`,
     };
 
@@ -259,13 +259,13 @@ userApi.post("/reset-password", errorhandler(async (req, res) => {
     const { email, newPassword } = req.body;
     let userCollectionObj = req.app.get("userCollectionObj");
 
-    // ✅ Hash new password
+    //Hash new password
     const hashedPassword = await bcryptjs.hash(newPassword, 10);
 
-    // ✅ Update password in DB
+    //Update password in DB
     await userCollectionObj.updateOne({ email }, { $set: { password: hashedPassword } });
 
-    // ✅ Remove OTP
+    //Remove OTP
     delete otpStorage[email];
 
     res.send({ message: "Password reset successful! You can now login." });

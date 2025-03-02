@@ -13,14 +13,15 @@ export class TopimdbComponent implements OnInit {
 searchTerm:string;
 
 
-myData:Item;
+myData: any[] = [];
 constructor(private itemObj:DataService , private router:Router) { }
 
 ngOnInit(): void {
 
   this.itemObj.getTopMoviesData().subscribe(
-    items=>{
-      this.myData=items;
+    response => {
+      this.myData = response.results; // Assign `results` array correctly
+      console.log("Fetched Top Rated Movies:", this.myData);
     },
     err=>{
       console.log("error is ",err)
@@ -33,9 +34,6 @@ ngOnInit(): void {
 
 onSelectId(id){
   this.router.navigateByUrl('movies/'+id)
-
-  
-
 }
 
 }

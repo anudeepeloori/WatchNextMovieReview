@@ -96,10 +96,10 @@
           
           <div class="card mt-4 mb-4 ">
 
-            <h1 class="card-top text-center" >{{itemObj.rank}}</h1>
+            <h1 class="card-top text-center" >⭐{{itemObj.vote_average}}</h1>
            
             
-             
+            <img [src]="'https://image.tmdb.org/t/p/w500' + itemObj.poster_path" class="card-img-top" alt="{{ itemObj.title }}">
             <div class="card-body content">
                 <h6>{{itemObj.title}}</h6>
          

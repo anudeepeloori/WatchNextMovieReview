@@ -10,7 +10,7 @@ import {DataService} from '../data.service' ;
 })
 export class ViewmoviesComponent implements OnInit {
 
-  myData:Item;
+  myData:any;
   constructor(private ds:DataService , private ar:ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -19,6 +19,7 @@ export class ViewmoviesComponent implements OnInit {
     this.ds.getMoviesDataById(id).subscribe(
       items=>{
         this.myData=items;
+        //console.log(items)
       },
       err=>{
         console.log("error is ",err)

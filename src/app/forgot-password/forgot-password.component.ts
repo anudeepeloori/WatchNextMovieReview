@@ -15,12 +15,12 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor(private ds: DataService) {}
 
-  // ✅ Required method for OnInit
+  // Required method for OnInit
   ngOnInit(): void {
     // console.log("ForgotPasswordComponent initialized");
   }
 
-  // ✅ Step 1: Request OTP
+  // Step 1: Request OTP
   requestOTP() {
     this.ds.sendOTP(this.email).subscribe(response => {
       alert(response.message);
@@ -30,7 +30,7 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  // ✅ Step 2: Verify OTP
+  // Step 2: Verify OTP
   verifyOTP() {
     this.ds.verifyOTP(this.email, this.otp).subscribe(response => {
       alert(response.message);
@@ -40,7 +40,7 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  // ✅ Step 3: Reset Password
+  // Step 3: Reset Password
   resetPassword() {
     this.ds.resetPassword(this.email, this.newPassword).subscribe(response => {
       alert(response.message);
