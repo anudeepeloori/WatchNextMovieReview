@@ -1,14 +1,14 @@
-
+<!-- 
 <div class="row p-5">
     <div class="col-2"></div>
     <div class="col-8"><h1><p class="display-4 text-center text-white m-5" style="font-family: 'Qahiri', sans-serif; ">Login here</p></h1>
         <form #ref="ngForm" (ngSubmit)="onLogin(ref.value)" class="w-75 mx-auto mt-5">
-            <!-- <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="type" id="admin" ngModel value="admin">
                 <label class="form-check-label text-white" for="admin">
                     Admin
                 </label>
-            </div> -->
+            </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input " type="radio" name="type" id="user" ngModel value="user">
                 <label class="form-check-label text-white" for="user">
@@ -32,4 +32,32 @@
   </div>
 
 
- 
+  -->
+  <div class="row p-5 justify-content-center">
+    <div class="col-lg-6 col-md-12">
+        <h1 class="text-center text-white m-5" style="font-family: 'Qahiri', sans-serif;">Login here</h1>
+        <form #ref="ngForm" (ngSubmit)="onLogin(ref.value)" class="w-100 mx-auto mt-5">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="type" id="user" ngModel value="user">
+                <label class="form-check-label text-white" for="user">
+                    User
+                </label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" placeholder="name@example.com" name="username" ngModel>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" placeholder="Password" name="password" ngModel>
+                <label for="password">Password</label>
+            </div>
+            <button class="btn btn-success w-25 d-block mx-auto" type="submit">Login</button>
+        </form>
+        <div class="text-center mt-3">
+            <a (click)="forgotPassword()" class="text-white forgot-password">Forgot Password?</a>
+        </div>
+        <div class="text-center mt-2">
+            <a routerLink="/home" class="text-white">Not a registered user?</a>
+        </div>
+    </div>
+</div>
